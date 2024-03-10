@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite verbose="1" name="Tests - Encryption" parallel="methods" thread-count="10">
+
+    <test name="HASH, AES, RSA encryption method tests">
+        <classes>
+            <class name="encryptiontesting.EncryptionMethodTest">
+                <methods>
+                    <include name="testHash"/>
+                    <include name="testAES"/>
+                    <include name="testRSA"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
