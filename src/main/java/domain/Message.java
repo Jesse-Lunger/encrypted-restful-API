@@ -1,5 +1,7 @@
 package domain;
 
+import org.apache.logging.log4j.core.config.Order;
+
 import java.sql.Timestamp;
 
 public class Message {
@@ -16,7 +18,6 @@ public class Message {
     public Message(){}
 
     private Message(Builder builder) {
-        this.messageId = builder.messageId;
         this.conversation = builder.conversation;
         this.messageType = builder.messageType;
         this.messageSender = builder.messageSender;
@@ -27,7 +28,6 @@ public class Message {
     }
 
     public static class Builder {
-        private int messageId;
         private Conversation conversation;
         private MessageType messageType;
         private String messageSender;
@@ -35,11 +35,6 @@ public class Message {
         private String messageSignature;
         private String aesKey;
         private Timestamp time;
-
-        public Builder messageId(int messageId) {
-            this.messageId = messageId;
-            return this;
-        }
 
         public Builder conversation(Conversation conversation) {
             this.conversation = conversation;
@@ -144,5 +139,10 @@ public class Message {
 
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    @Override
+    public String toString(){
+        return "(messageID= " + messageId + ", " + conversation + ")";
     }
 }

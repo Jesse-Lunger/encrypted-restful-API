@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="persistence.IMessageTypeDAO">
+
+    <resultMap id="MessageTypeResultMap" type="MessageType" autoMapping="true">
+        <id property="messageTypeId" column="message_type_id"/>
+        <result property="messageTypeName" column="message_type_name"/>
+    </resultMap>
+
+    <select id="getMessageTypeByName" resultMap="MessageTypeResultMap">
+        SELECT * FROM message_types WHERE message_type_name = #{messageTypeName}
+    </select>
+
+    <select id="getAll" resultMap="MessageTypeResultMap">
+        SELECT * FROM message_types;
+    </select>
+
+    <select id="getEntityById" resultMap="MessageTypeResultMap">
+        SELECT * FROM message_types WHERE message_type_id = #{id};
+    </select>
+
+    <insert id="saveEntity" parameterType="MessageType" useGeneratedKeys="true" keyProperty="messageTypeId" keyColumn="message_type_id">
+        INSERT INTO message_types (message_type_name)
+        VALUES (#{messageTypeName});
+    </insert>
+
+    <update id="updateEntity" parameterType="MessageType">
+        UPDATE message_types SET
+        message_type_name = #{messageTypeName}
+        WHERE message_type_id = #{messageTypeId};
+    </update>
+
+    <delete id="removeEntityById" parameterType="int">
+        DELETE FROM message_types WHERE message_type_id = #{id};
+    </delete>
+</mapper>

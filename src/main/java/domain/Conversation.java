@@ -9,20 +9,13 @@ public class Conversation {
     public Conversation(){}
 
     private Conversation(Builder builder){
-        this.conversationId = builder.conversationId;
         this.sender = builder.sender;
         this.receiver = builder.receiver;
     }
 
     public static class Builder{
-        private int conversationId;
         private User sender;
         private User receiver;
-
-        public Builder conversationId(int conversationId){
-            this.conversationId = conversationId;
-            return this;
-        }
 
         public Builder sender(User sender){
             this.sender = sender;
@@ -65,6 +58,6 @@ public class Conversation {
 
     @Override
     public String toString(){
-        return "conversationId: " + conversationId + ", sender: " + sender + ", receiver: " + receiver;
+        return "(conversationId: " + conversationId + ", sender: " + sender + ", receiver: " + receiver + ")";
     }
 }

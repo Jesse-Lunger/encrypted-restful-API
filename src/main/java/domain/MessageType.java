@@ -49,6 +49,6 @@ public class MessageType {
 
     @Override
     public String toString(){
-        return messageTypeName;
+        return "(Message Type: " + messageTypeName + ", id: " + messageTypeId + ")";
     }
 }

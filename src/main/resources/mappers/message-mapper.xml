@@ -1,0 +1,48 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="persistence.IMessageDAO">
+
+    <resultMap id="MessageResultMap" type="Message" autoMapping="true">
+        <id property="messageId" column="message_id"/>
+        <result property="messageSender" column="message_sender"/>
+        <result property="messageReceiver" column="message_receiver"/>
+        <result property="messageSignature" column="message_signature"/>
+        <result property="aesKey" column="aes_key"/>
+        <result property="time" column="time"/>
+        <association property="conversation" column="conversation_id" javaType="Conversation"
+                     select="persistence.IConversationDAO.getEntityById"/>
+        <association property="messageType" column="message_type_id" javaType="MessageType"
+                     select="persistence.IMessageTypeDAO.getEntityById"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="MessageResultMap">
+        SELECT * FROM messages;
+    </select>
+
+    <select id="getEntityById" resultMap="MessageResultMap">
+        SELECT * FROM messages WHERE message_id = #{id};
+    </select>
+
+    <insert id="saveEntity" parameterType="Message" useGeneratedKeys="true" keyProperty="messageId" keyColumn="message_id">
+        INSERT INTO messages (conversation_id, message_type_id, message_sender, message_receiver, message_signature, aes_key, time)
+        VALUES (#{conversation.conversationId}, #{messageType.messageTypeId}, #{messageSender}, #{messageReceiver}, #{messageSignature}, #{aesKey}, #{time});
+    </insert>
+
+    <update id="updateEntity" parameterType="Message">
+        UPDATE messages SET
+        conversation_id = #{conversation.conversationId},
+        message_type_id = #{messageType.messageTypeId},
+        message_sender = #{messageSender},
+        message_receiver = #{messageReceiver},
+        message_signature = #{messageSignature},
+        aes_key = #{aesKey},
+        time = #{time}
+        WHERE message_id = #{messageId};
+    </update>
+
+    <delete id="removeEntityById" parameterType="int">
+        DELETE FROM messages WHERE message_id = #{id};
+    </delete>
+</mapper>

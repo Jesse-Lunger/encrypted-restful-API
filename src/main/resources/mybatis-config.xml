@@ -1,0 +1,36 @@
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <properties resource="db.properties"/>
+
+    <typeAliases>
+        <typeAlias alias="Conversation" type="domain.Conversation"/>
+        <typeAlias alias="Message" type="domain.Message"/>
+        <typeAlias alias="MessageType" type="domain.MessageType"/>
+        <typeAlias alias="User" type="domain.User"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+                <property name="poolMaximumActiveConnections" value="30"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="mappers/conversation-mapper.xml"/>
+        <mapper resource="mappers/message-mapper.xml"/>
+        <mapper resource="mappers/message-type-mapper.xml"/>
+        <mapper resource="mappers/user-mapper.xml"/>
+    </mappers>
+
+</configuration>

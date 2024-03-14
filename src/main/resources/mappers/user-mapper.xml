@@ -1,0 +1,46 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="persistence.IUserDAO">
+
+    <resultMap id="UserResultMap" type="User" autoMapping="true">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="passwordHashed" column="password_hashed"/>
+        <result property="aesKeyEncrypted" column="aes_key_encrypted"/>
+        <result property="publicKey" column="public_key"/>
+        <result property="privateKeyEncrypted" column="private_key_encrypted"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="UserResultMap">
+        SELECT * FROM users;
+    </select>
+
+    <select id="getEntityById" resultMap="UserResultMap">
+        SELECT * FROM users WHERE user_id = #{id};
+    </select>
+
+    <select id="getByUserName" resultMap="UserResultMap">
+        SELECT * FROM users WHERE user_name = #{userName};
+    </select>
+
+    <insert id="saveEntity" parameterType="User" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        INSERT INTO users (user_name, password_hashed, aes_key_encrypted, public_key, private_key_encrypted)
+        VALUES (#{userName}, #{passwordHashed}, #{aesKeyEncrypted}, #{publicKey}, #{privateKeyEncrypted});
+    </insert>
+
+    <update id="updateEntity" parameterType="User">
+        UPDATE users SET
+        user_name = #{userName},
+        password_hashed = #{passwordHashed},
+        aes_key_encrypted = #{aesKeyEncrypted},
+        public_key = #{publicKey},
+        private_key_encrypted = #{privateKeyEncrypted}
+        WHERE user_id = #{userId};
+    </update>
+
+    <delete id="removeEntityById" parameterType="int">
+        DELETE FROM users WHERE user_id = #{id};
+    </delete>
+</mapper>

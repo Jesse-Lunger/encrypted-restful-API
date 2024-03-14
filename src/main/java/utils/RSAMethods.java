@@ -35,6 +35,7 @@ public class RSAMethods {
         byte[] bytes = publicKey.getEncoded();
         return Base64.getEncoder().encodeToString(bytes);
     }
+
     public static String convertPrivateKeyToString(PrivateKey privateKey){
         byte[] bytes = privateKey.getEncoded();
         return Base64.getEncoder().encodeToString(bytes);

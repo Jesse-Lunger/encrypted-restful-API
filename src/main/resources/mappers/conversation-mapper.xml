@@ -1,0 +1,39 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="persistence.IConversationDAO">
+
+    <resultMap id="ConversationResultMap" type="Conversation" autoMapping="false">
+        <id property="conversationId" column="conversation_id"/>
+        <association property="sender" column="sender_id" javaType="User"
+                     select="persistence.IUserDAO.getEntityById"/>
+        <association property="receiver" column="receiver_id" javaType="User"
+                     select="persistence.IUserDAO.getEntityById"/>
+    </resultMap>
+
+
+    <select id="getAll" resultMap="ConversationResultMap">
+        SELECT * FROM conversations;
+    </select>
+
+    <select id="getEntityById" resultMap="ConversationResultMap">
+        SELECT * FROM conversations WHERE conversation_id = #{id};
+    </select>
+
+    <insert id="saveEntity" parameterType="Conversation" useGeneratedKeys="true" keyProperty="conversationId" keyColumn="conversation_id">
+        INSERT INTO conversations (sender_id, receiver_id)
+        VALUES (#{sender.userId}, #{receiver.userId});
+    </insert>
+
+    <update id="updateEntity" parameterType="Conversation">
+        UPDATE conversations SET
+        sender_id = #{sender.userId},
+        receiver_id = #{receiver.userId}
+        WHERE conversation_id = #{conversationId};
+    </update>
+
+    <delete id="removeEntityById" parameterType="int">
+        DELETE FROM conversations WHERE conversation_id = #{id};
+    </delete>
+</mapper>
