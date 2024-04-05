@@ -5,17 +5,24 @@ public class Conversation {
     private int conversationId;
     private User sender;
     private User receiver;
+    private byte[] aesKeySender;
+    private byte[] aesKeyReceiver;
 
     public Conversation(){}
 
     private Conversation(Builder builder){
         this.sender = builder.sender;
         this.receiver = builder.receiver;
+        this.aesKeyReceiver = builder.aesKeySender;
+        this.aesKeySender = builder.aesKeySender;
     }
 
     public static class Builder{
+
         private User sender;
         private User receiver;
+        private byte[] aesKeySender;
+        private byte[] aesKeyReceiver;
 
         public Builder sender(User sender){
             this.sender = sender;
@@ -24,6 +31,16 @@ public class Conversation {
 
         public Builder receiver(User receiver){
             this.receiver = receiver;
+            return this;
+        }
+
+        public Builder aesKeySender(byte[] aesKeySender){
+            this.aesKeySender = aesKeySender;
+            return this;
+        }
+
+        public Builder aesKeyReceiver(byte[] aesKeyReceiver){
+            this.aesKeyReceiver = aesKeyReceiver;
             return this;
         }
 
@@ -54,6 +71,22 @@ public class Conversation {
 
     public void setReceiver(User receiver) {
         this.receiver = receiver;
+    }
+
+    public byte[] getAesKeySender() {
+        return aesKeySender;
+    }
+
+    public void setAesKeySender(byte[] aesKeySender) {
+        this.aesKeySender = aesKeySender;
+    }
+
+    public byte[] getAesKeyReceiver() {
+        return aesKeyReceiver;
+    }
+
+    public void setAesKeyReceiver(byte[] aesKeyReceiver) {
+        this.aesKeyReceiver = aesKeyReceiver;
     }
 
     @Override

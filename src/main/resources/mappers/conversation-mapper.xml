@@ -6,6 +6,8 @@
 
     <resultMap id="ConversationResultMap" type="Conversation" autoMapping="false">
         <id property="conversationId" column="conversation_id"/>
+        <result property="aesKeySender" column="aes_key_sender"/>
+        <result property="aesKeyReceiver" column="aes_key_receiver"/>
         <association property="sender" column="sender_id" javaType="User"
                      select="persistence.IUserDAO.getEntityById"/>
         <association property="receiver" column="receiver_id" javaType="User"
@@ -22,14 +24,16 @@
     </select>
 
     <insert id="saveEntity" parameterType="Conversation" useGeneratedKeys="true" keyProperty="conversationId" keyColumn="conversation_id">
-        INSERT INTO conversations (sender_id, receiver_id)
-        VALUES (#{sender.userId}, #{receiver.userId});
+        INSERT INTO conversations (sender_id, receiver_id, aes_key_sender, aes_key_receiver)
+        VALUES (#{sender.userId}, #{receiver.userId}, #{aesKeySender}, #{aesKeyReceiver});
     </insert>
 
     <update id="updateEntity" parameterType="Conversation">
         UPDATE conversations SET
         sender_id = #{sender.userId},
-        receiver_id = #{receiver.userId}
+        receiver_id = #{receiver.userId},
+        aes_key_sender = #{aesKeySender},
+        aes_key_receiver = #{aesKeyReceiver}
         WHERE conversation_id = #{conversationId};
     </update>
 

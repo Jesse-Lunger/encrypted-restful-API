@@ -7,6 +7,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import service.UserService;
+import utils.encryptionMethods.domain.UserMethods;
 
 public class UserTest {
 
@@ -15,11 +16,11 @@ public class UserTest {
     @DataProvider
     public Object[][] users(){
         return new Object[][]{
-                {"john", "password1", "AESKey1", "publicKey1", "privateKey1"},
-                {"billy", "password2", "AESKey2", "publicKey2", "privateKey2"},
-                {"mick", "password3", "AESKey3", "publicKey3", "privateKey3"},
-                {"nolan", "password3", "AESKey3", "publicKey3", "privateKey3"},
-                {"durgan", "password4", "AESKey4", "publicKey4", "privateKey4"}
+                {"john", "password1"},
+                {"billy", "password2"},
+                {"mick", "password3"},
+                {"nolan", "password3"},
+                {"durgan", "password4"}
         };
     }
 
@@ -30,12 +31,10 @@ public class UserTest {
             User user = new User.Builder()
                     .userName((String) userData[0])
                     .passwordHashed((String) userData[1])
-                    .aesKeyEncrypted((String) userData[2])
-                    .publicKey((String) userData[3])
-                    .privateKeyEncrypted((String) userData[4])
                     .build();
+            UserMethods.encryptUser(user);
             userService.saveEntity(user);
-            Assert.assertTrue(user.getUserId() != 0);
+            Assert.assertNotNull(userService.getByUserName(user.getUserName()));
         }
     }
 

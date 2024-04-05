@@ -6,10 +6,8 @@
 
     <resultMap id="MessageResultMap" type="Message" autoMapping="true">
         <id property="messageId" column="message_id"/>
-        <result property="messageSender" column="message_sender"/>
-        <result property="messageReceiver" column="message_receiver"/>
+        <result property="message" column="message"/>
         <result property="messageSignature" column="message_signature"/>
-        <result property="aesKey" column="aes_key"/>
         <result property="time" column="time"/>
         <association property="conversation" column="conversation_id" javaType="Conversation"
                      select="persistence.IConversationDAO.getEntityById"/>
@@ -26,18 +24,16 @@
     </select>
 
     <insert id="saveEntity" parameterType="Message" useGeneratedKeys="true" keyProperty="messageId" keyColumn="message_id">
-        INSERT INTO messages (conversation_id, message_type_id, message_sender, message_receiver, message_signature, aes_key, time)
-        VALUES (#{conversation.conversationId}, #{messageType.messageTypeId}, #{messageSender}, #{messageReceiver}, #{messageSignature}, #{aesKey}, #{time});
+        INSERT INTO messages (conversation_id, message_type_id, message, message_signature, time)
+        VALUES (#{conversation.conversationId}, #{messageType.messageTypeId}, #{message}, #{messageSignature}, #{time});
     </insert>
 
     <update id="updateEntity" parameterType="Message">
         UPDATE messages SET
         conversation_id = #{conversation.conversationId},
         message_type_id = #{messageType.messageTypeId},
-        message_sender = #{messageSender},
-        message_receiver = #{messageReceiver},
+        message = #{message},
         message_signature = #{messageSignature},
-        aes_key = #{aesKey},
         time = #{time}
         WHERE message_id = #{messageId};
     </update>

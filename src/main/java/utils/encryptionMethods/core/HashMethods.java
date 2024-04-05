@@ -1,6 +1,13 @@
-package utils;
+package utils.encryptionMethods.core;
 
 import org.mindrot.jbcrypt.BCrypt;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.KeySpec;
+
 public class HashMethods {
 
     public static String hashString(String password, int iterations){

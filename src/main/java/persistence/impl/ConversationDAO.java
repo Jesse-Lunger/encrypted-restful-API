@@ -3,7 +3,7 @@ package persistence.impl;
 import domain.Conversation;
 import org.apache.ibatis.session.SqlSession;
 import persistence.IConversationDAO;
-import utils.MySQLFactory;
+import utils.encryptionMethods.core.MySQLFactory;
 
 import java.util.List;
 

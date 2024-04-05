@@ -9,6 +9,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import service.ConversationService;
 import service.UserService;
+import utils.encryptionMethods.domain.ConversationMethods;
+import utils.encryptionMethods.domain.UserMethods;
 
 import java.util.List;
 
@@ -20,11 +22,11 @@ public class ConversationTest {
     @DataProvider
     public Object[][] users(){
         return new Object[][]{
-                {"john", "password1", "AESKey1", "publicKey1", "privateKey1"},
-                {"billy", "password2", "AESKey2", "publicKey2", "privateKey2"},
-                {"mick", "password3", "AESKey3", "publicKey3", "privateKey3"},
-                {"nolan", "password3", "AESKey3", "publicKey3", "privateKey3"},
-                {"durgan", "password4", "AESKey4", "publicKey4", "privateKey4"}
+                {"john", "password1"},
+                {"billy", "password2"},
+                {"mick", "password3"},
+                {"nolan", "password3"},
+                {"durgan", "password4"}
         };
     }
 
@@ -32,15 +34,9 @@ public class ConversationTest {
     public void populateUsers(){
         Object[][] data = users();
         for (Object[] userData: users()){
-            User user = new User.Builder()
-                    .userName((String) userData[0])
-                    .passwordHashed((String) userData[1])
-                    .aesKeyEncrypted((String) userData[2])
-                    .publicKey((String) userData[3])
-                    .privateKeyEncrypted((String) userData[4])
-                    .build();
+            User user = UserMethods.createEncyptedUser((String) userData[0], (String) userData[1]);
             userService.saveEntity(user);
-            Assert.assertTrue(user.getUserId() != 0);
+            Assert.assertNotNull(userService.getByUserName(user.getUserName()));
         }
     }
 
@@ -50,10 +46,7 @@ public class ConversationTest {
         int numUsers = users.size();
         for (int i = 0; i < numUsers; i++){
             for (int j = i + 1; j < numUsers; j++){
-                Conversation conversation = new Conversation.Builder()
-                        .sender(users.get(i))
-                        .receiver(users.get(j))
-                        .build();
+                Conversation conversation = ConversationMethods.createEncryptedConversation(users.get(i), users.get(j));
                 conversationService.saveEntity(conversation);
             }
         }

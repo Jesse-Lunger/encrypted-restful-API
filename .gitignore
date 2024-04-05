@@ -32,3 +32,4 @@ build/
 !**/src/test/**/build/
 
 /src/main/resources/db.properties
+/logs

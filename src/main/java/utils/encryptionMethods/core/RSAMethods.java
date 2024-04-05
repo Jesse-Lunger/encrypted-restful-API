@@ -1,11 +1,10 @@
-package utils;
+package utils.encryptionMethods.core;
 
 import java.lang.invoke.MethodHandles;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +22,7 @@ public class RSAMethods {
     public static Optional<KeyPair> generateKeyPair(){
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(3072);
+            keyPairGenerator.initialize(2048);
             return Optional.of(keyPairGenerator.generateKeyPair());
         } catch (NoSuchAlgorithmException e){
             LOGGER.error(e.getMessage());
@@ -31,19 +30,23 @@ public class RSAMethods {
         }
     }
 
-    public static String convertPublicKeyToString(PublicKey publicKey){
+    public static String convertKeyToString(PublicKey publicKey){
         byte[] bytes = publicKey.getEncoded();
-        return Base64.getEncoder().encodeToString(bytes);
+        return BasicConversions.bytesToString(bytes);
     }
 
-    public static String convertPrivateKeyToString(PrivateKey privateKey){
+    public static String convertKeyToString(PrivateKey privateKey){
         byte[] bytes = privateKey.getEncoded();
-        return Base64.getEncoder().encodeToString(bytes);
+        return BasicConversions.bytesToString(bytes);
     }
 
     public static Optional<PublicKey> convertStringToPublicKey(String publicKey){
-        try{
-            byte[] bytes = Base64.getDecoder().decode(publicKey);
+        byte[] bytes = BasicConversions.stringToBytes(publicKey);
+        return convertBytesToPublicKey(bytes);
+    }
+
+    public static Optional<PublicKey> convertBytesToPublicKey(byte[] bytes){
+        try {
             X509EncodedKeySpec spec = new X509EncodedKeySpec(bytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             return Optional.of(keyFactory.generatePublic(spec));
@@ -54,8 +57,12 @@ public class RSAMethods {
     }
 
     public static Optional<PrivateKey> convertStringToPrivateKey(String privateKey){
+        byte[] bytes = BasicConversions.stringToBytes(privateKey);
+        return convertBytesToPrivateKey(bytes);
+    }
+
+    public static Optional<PrivateKey> convertBytesToPrivateKey(byte[] bytes){
         try {
-            byte[] bytes = Base64.getDecoder().decode(privateKey);
             PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(bytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             return Optional.of(keyFactory.generatePrivate(spec));
@@ -65,12 +72,23 @@ public class RSAMethods {
         }
     }
 
-    public static Optional<String> encrypt(PublicKey publicKey, String plainText){
+    public static Optional<String> encryptString(PublicKey publicKey, String plainText){
+        byte[] tmp = plainText.getBytes();
+        Optional<byte[]> encryptedBytesOptional = encryptBytes(publicKey, tmp);
+        return encryptedBytesOptional.map(BasicConversions::bytesToString);
+    }
+
+    public static Optional<String> decryptString(PrivateKey privateKey, String encryptedText){
+        byte[] bytes= BasicConversions.stringToBytes(encryptedText);
+        Optional<byte[]> encryptedbytesOptional = decryptBytes(privateKey, bytes);
+        return encryptedbytesOptional.map(String::new);
+    }
+
+    public static Optional<byte[]> encryptBytes(PublicKey publicKey, byte[] encryptedBytes){
         try {
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            byte[] bytes = cipher.doFinal(plainText.getBytes());
-            return Optional.of(Base64.getEncoder().encodeToString(bytes));
+            return Optional.of(cipher.doFinal(encryptedBytes));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |
                  IllegalBlockSizeException | BadPaddingException e){
             LOGGER.error(e.getMessage());
@@ -78,12 +96,11 @@ public class RSAMethods {
         }
     }
 
-    public static Optional<String> decrypt(PrivateKey privateKey, String encryptedText){
+    public static Optional<byte[]> decryptBytes(PrivateKey privateKey, byte[] encryptedBytes){
         try{
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            byte[] bytes = cipher.doFinal(Base64.getDecoder().decode(encryptedText));
-            return Optional.of(new String(bytes));
+            return Optional.of(cipher.doFinal(encryptedBytes));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |
                  BadPaddingException | IllegalBlockSizeException e){
             LOGGER.error(e.getMessage());

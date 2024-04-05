@@ -2,10 +2,8 @@ package persistence.impl;
 
 import domain.Message;
 import org.apache.ibatis.session.SqlSession;
-import persistence.IConversationDAO;
 import persistence.IMessageDAO;
-import persistence.IMessageTypeDAO;
-import utils.MySQLFactory;
+import utils.encryptionMethods.core.MySQLFactory;
 
 import java.util.List;
 

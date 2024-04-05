@@ -2,9 +2,8 @@ package persistence.impl;
 
 import domain.User;
 import org.apache.ibatis.session.SqlSession;
-import persistence.IMessageTypeDAO;
 import persistence.IUserDAO;
-import utils.MySQLFactory;
+import utils.encryptionMethods.core.MySQLFactory;
 
 import java.util.List;
 
@@ -37,8 +36,10 @@ public class UserDAO implements IUserDAO {
     public void saveEntity(User user) {
         try (SqlSession sqlSession = MySQLFactory.getSqlSessionFactory().openSession()) {
             IUserDAO mapper = sqlSession.getMapper(IUserDAO.class);
-            mapper.saveEntity(user);
-            sqlSession.commit();
+            if (mapper.getByUserName(user.getUserName()) == null){
+                mapper.saveEntity(user);
+                sqlSession.commit();
+            }
         }
     }
 
@@ -46,8 +47,10 @@ public class UserDAO implements IUserDAO {
     public void updateEntity(User user) {
         try (SqlSession sqlSession = MySQLFactory.getSqlSessionFactory().openSession()) {
             IUserDAO mapper = sqlSession.getMapper(IUserDAO.class);
-            mapper.updateEntity(user);
-            sqlSession.commit();
+            if (mapper.getByUserName(user.getUserName()) != null){
+                mapper.updateEntity(user);
+                sqlSession.commit();
+            }
         }
     }
 
@@ -55,8 +58,10 @@ public class UserDAO implements IUserDAO {
     public void removeEntityById(int id) {
         try (SqlSession sqlSession = MySQLFactory.getSqlSessionFactory().openSession()) {
             IUserDAO mapper = sqlSession.getMapper(IUserDAO.class);
-            mapper.removeEntityById(id);
-            sqlSession.commit();
+            if (mapper.getEntityById(id) != null){
+                mapper.removeEntityById(id);
+                sqlSession.commit();
+            }
         }
     }
 }

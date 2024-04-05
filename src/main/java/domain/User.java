@@ -5,9 +5,8 @@ public class User {
     private int userId;
     private String userName;
     private String passwordHashed;
-    private String aesKeyEncrypted;
-    private String publicKey;
-    private String privateKeyEncrypted;
+    private byte[] publicKey;
+    private byte[] privateKeyEncrypted;
 
     public User(){};
 
@@ -15,7 +14,6 @@ public class User {
         this.userId = builder.userId;
         this.userName = builder.userName;
         this.passwordHashed = builder.passwordHashed;
-        this.aesKeyEncrypted = builder.aesKeyEncrypted;
         this.publicKey = builder.publicKey;
         this.privateKeyEncrypted = builder.privateKeyEncrypted;
     }
@@ -24,9 +22,8 @@ public class User {
         private int userId;
         private String userName;
         private String passwordHashed;
-        private String aesKeyEncrypted;
-        private String publicKey;
-        private String privateKeyEncrypted;
+        private byte[] publicKey;
+        private byte[] privateKeyEncrypted;
 
         public Builder userId(int userId) {
             this.userId = userId;
@@ -42,17 +39,12 @@ public class User {
             return this;
         }
 
-        public Builder aesKeyEncrypted(String aesKeyEncrypted) {
-            this.aesKeyEncrypted = aesKeyEncrypted;
-            return this;
-        }
-
-        public Builder publicKey(String publicKey) {
+        public Builder publicKey(byte[] publicKey) {
             this.publicKey = publicKey;
             return this;
         }
 
-        public Builder privateKeyEncrypted(String privateKeyEncrypted) {
+        public Builder privateKeyEncrypted(byte[] privateKeyEncrypted) {
             this.privateKeyEncrypted = privateKeyEncrypted;
             return this;
         }
@@ -86,27 +78,19 @@ public class User {
         this.passwordHashed = passwordHashed;
     }
 
-    public String getAesKeyEncrypted() {
-        return aesKeyEncrypted;
-    }
-
-    public void setAesKeyEncrypted(String aesKeyEncrypted) {
-        this.aesKeyEncrypted = aesKeyEncrypted;
-    }
-
-    public String getPublicKey() {
+    public byte[] getPublicKey() {
         return publicKey;
     }
 
-    public void setPublicKey(String publicKey) {
+    public void setPublicKey(byte[] publicKey) {
         this.publicKey = publicKey;
     }
 
-    public String getPrivateKeyEncrypted() {
+    public byte[] getPrivateKeyEncrypted() {
         return privateKeyEncrypted;
     }
 
-    public void setPrivateKeyEncrypted(String privateKeyEncrypted) {
+    public void setPrivateKeyEncrypted(byte[] privateKeyEncrypted) {
         this.privateKeyEncrypted = privateKeyEncrypted;
     }
 

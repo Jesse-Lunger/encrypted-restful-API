@@ -1,7 +1,5 @@
 package domain;
 
-import org.apache.logging.log4j.core.config.Order;
-
 import java.sql.Timestamp;
 
 public class Message {
@@ -9,10 +7,8 @@ public class Message {
     private int messageId;
     private Conversation conversation;
     private MessageType messageType;
-    private String messageSender;
-    private String messageReceiver;
+    private byte[] message;
     private String messageSignature;
-    private String aesKey;
     private Timestamp time;
 
     public Message(){}
@@ -20,20 +16,16 @@ public class Message {
     private Message(Builder builder) {
         this.conversation = builder.conversation;
         this.messageType = builder.messageType;
-        this.messageSender = builder.messageSender;
-        this.messageReceiver = builder.messageReceiver;
+        this.message = builder.message;
         this.messageSignature = builder.messageSignature;
-        this.aesKey = builder.aesKey;
         this.time = builder.time;
     }
 
     public static class Builder {
         private Conversation conversation;
         private MessageType messageType;
-        private String messageSender;
-        private String messageReceiver;
+        private byte[] message;
         private String messageSignature;
-        private String aesKey;
         private Timestamp time;
 
         public Builder conversation(Conversation conversation) {
@@ -46,13 +38,8 @@ public class Message {
             return this;
         }
 
-        public Builder messageSender(String messageSender) {
-            this.messageSender = messageSender;
-            return this;
-        }
-
-        public Builder messageReceiver(String messageReceiver) {
-            this.messageReceiver = messageReceiver;
+        public Builder message(byte[] message) {
+            this.message = message;
             return this;
         }
 
@@ -61,10 +48,6 @@ public class Message {
             return this;
         }
 
-        public Builder aesKey(String aesKey) {
-            this.aesKey = aesKey;
-            return this;
-        }
 
         public Builder time(Timestamp time) {
             this.time = time;
@@ -101,20 +84,12 @@ public class Message {
         this.messageType = messageType;
     }
 
-    public String getMessageSender() {
-        return messageSender;
+    public byte[] getMessage() {
+        return message;
     }
 
-    public void setMessageSender(String messageSender) {
-        this.messageSender = messageSender;
-    }
-
-    public String getMessageReceiver() {
-        return messageReceiver;
-    }
-
-    public void setMessageReceiver(String messageReceiver) {
-        this.messageReceiver = messageReceiver;
+    public void setMessage(byte[] message) {
+        this.message = message;
     }
 
     public String getMessageSignature() {
@@ -123,14 +98,6 @@ public class Message {
 
     public void setMessageSignature(String messageSignature) {
         this.messageSignature = messageSignature;
-    }
-
-    public String getAesKey() {
-        return aesKey;
-    }
-
-    public void setAesKey(String aesKey) {
-        this.aesKey = aesKey;
     }
 
     public Timestamp getTime() {

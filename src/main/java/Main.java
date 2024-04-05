@@ -1,31 +1,32 @@
+import domain.Conversation;
+import domain.Message;
 import domain.MessageType;
-import service.MessageTypeService;
+import domain.User;
+import utils.encryptionMethods.domain.ConversationMethods;
+import utils.encryptionMethods.domain.MessageMethods;
+import utils.encryptionMethods.domain.UserMethods;
 
 public class Main {
 
+
     public static void main(String[] args) {
 
-        // hash methods
+        String password1 = "password1";
+        String password2 = "password2";
 
-        // AES encryption symmetric
+        User user1 = UserMethods.createEncyptedUser("jake", password1);
+        User user2 = UserMethods.createEncyptedUser("bill", password2);
 
-        // RSA encryption asymmetric
+        MessageType messageType = new MessageType.Builder()
+                .messageTypeName("private message")
+                .build();
 
-        // hardford travelers gaurdian fdm
+        Conversation conversation = ConversationMethods.createEncryptedConversation(user1, user2);
 
-        // "dog" "cat" %3 -> %10000000000000000000000000000000000000000000000000000000000000000
+        Message message = MessageMethods.createEncryptedMessage(password1, conversation, messageType, "hello this is a secret message");
 
-        MessageType messageType = new MessageType.Builder().messageTypeName("asdf").build();
-
-        MessageTypeService messageTypeService = new MessageTypeService();
-        messageTypeService.saveEntity(messageType);
-        messageTypeService.saveEntity(messageType);
-        messageType = messageTypeService.getMessageTypeByName(messageType.getMessageTypeName());
-        System.out.println(messageType);
-
-
-        messageTypeService.removeEntityById(messageType.getMessageTypeId());
-
+        System.out.println(MessageMethods.senderDecryptMessage(message, password1));
+        System.out.println(MessageMethods.receiverDecryptMessage(message, password2));
 
     }
 }
