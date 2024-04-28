@@ -8,45 +8,14 @@ public class Conversation {
     private byte[] aesKeySender;
     private byte[] aesKeyReceiver;
 
-    public Conversation(){}
+    public Conversation() {
+    }
 
-    private Conversation(Builder builder){
+    private Conversation(Builder builder) {
         this.sender = builder.sender;
         this.receiver = builder.receiver;
         this.aesKeyReceiver = builder.aesKeySender;
         this.aesKeySender = builder.aesKeySender;
-    }
-
-    public static class Builder{
-
-        private User sender;
-        private User receiver;
-        private byte[] aesKeySender;
-        private byte[] aesKeyReceiver;
-
-        public Builder sender(User sender){
-            this.sender = sender;
-            return this;
-        }
-
-        public Builder receiver(User receiver){
-            this.receiver = receiver;
-            return this;
-        }
-
-        public Builder aesKeySender(byte[] aesKeySender){
-            this.aesKeySender = aesKeySender;
-            return this;
-        }
-
-        public Builder aesKeyReceiver(byte[] aesKeyReceiver){
-            this.aesKeyReceiver = aesKeyReceiver;
-            return this;
-        }
-
-        public Conversation build(){
-            return new Conversation(this);
-        }
     }
 
     public int getConversationId() {
@@ -90,7 +59,39 @@ public class Conversation {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "(conversationId: " + conversationId + ", sender: " + sender + ", receiver: " + receiver + ")";
+    }
+
+    public static class Builder {
+
+        private User sender;
+        private User receiver;
+        private byte[] aesKeySender;
+        private byte[] aesKeyReceiver;
+
+        public Builder sender(User sender) {
+            this.sender = sender;
+            return this;
+        }
+
+        public Builder receiver(User receiver) {
+            this.receiver = receiver;
+            return this;
+        }
+
+        public Builder aesKeySender(byte[] aesKeySender) {
+            this.aesKeySender = aesKeySender;
+            return this;
+        }
+
+        public Builder aesKeyReceiver(byte[] aesKeyReceiver) {
+            this.aesKeyReceiver = aesKeyReceiver;
+            return this;
+        }
+
+        public Conversation build() {
+            return new Conversation(this);
+        }
     }
 }

@@ -2,7 +2,7 @@ package persistence;
 
 import java.util.List;
 
-public interface IBaseDAO<Entity>{
+public interface IBaseDAO<Entity> {
 
     List<Entity> getAll();
 

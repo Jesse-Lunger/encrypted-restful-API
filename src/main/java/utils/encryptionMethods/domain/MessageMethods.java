@@ -18,27 +18,27 @@ public class MessageMethods {
 
     private static final Logger LOGGER = LogManager.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static byte[] encrypt(Message message, SecretKey secretKey){
+    private static byte[] encrypt(Message message, SecretKey secretKey) {
         Optional<byte[]> encryptedMessageOptional = AESMethods.encryptBytes(secretKey, message.getMessage());
-        if (encryptedMessageOptional.isEmpty()){
+        if (encryptedMessageOptional.isEmpty()) {
             LOGGER.error("encrypt: Failed to encrypt message with conversation AES key");
             return null;
         }
-        return  encryptedMessageOptional.get();
+        return encryptedMessageOptional.get();
     }
 
-    private static byte[] decrypt(Message message, SecretKey secretKey){
+    private static byte[] decrypt(Message message, SecretKey secretKey) {
         Optional<byte[]> encryptedMessageOptional = AESMethods.decryptBytes(secretKey, message.getMessage());
-        if (encryptedMessageOptional.isEmpty()){
+        if (encryptedMessageOptional.isEmpty()) {
             LOGGER.error("decrypt: Failed to decrypt message with conversation AES key");
             return null;
         }
         return encryptedMessageOptional.get();
     }
 
-    public static void senderEncryptMessage(Message message, String senderPassword){
+    public static void senderEncryptMessage(Message message, String senderPassword) {
         Optional<SecretKey> secretKeyOptional = ConversationMethods.decryptAESKeySender(message.getConversation(), senderPassword);
-        if (secretKeyOptional.isEmpty()){
+        if (secretKeyOptional.isEmpty()) {
             LOGGER.error("senderEncryptMessage: Failed to decrypt conversation AES key");
             return;
         }
@@ -46,10 +46,10 @@ public class MessageMethods {
         message.setMessage(encrypt(message, secretKeyOptional.get()));
     }
 
-    public static Message createEncryptedMessage(String senderPassword, Conversation conversation, MessageType messageType, String messageStr){
+    public static Message createEncryptedMessage(String senderPassword, Conversation conversation, MessageType messageType, String messageStr) {
         Message message = new Message.Builder()
                 .messageSignature(HashMethods.hashString(messageStr))
-                .time( new Timestamp(System.currentTimeMillis()))
+                .time(new Timestamp(System.currentTimeMillis()))
                 .conversation(conversation)
                 .messageType(messageType)
                 .message(BasicConversions.stringToBytes(messageStr))
@@ -58,32 +58,32 @@ public class MessageMethods {
         return message;
     }
 
-    public static String senderDecryptMessage(Message message, String senderPassword){
+    public static String senderDecryptMessage(Message message, String senderPassword) {
         Optional<SecretKey> secretKeyOptional = ConversationMethods.decryptAESKeySender(message.getConversation(), senderPassword);
-        if (secretKeyOptional.isEmpty()){
+        if (secretKeyOptional.isEmpty()) {
             LOGGER.error("receiverEncryptMessage: Failed to decrypt conversation AES key");
             return null;
         }
         String strMessage = BasicConversions.bytesToString(decrypt(message, secretKeyOptional.get()));
-        if (!HashMethods.isHashMatch(strMessage, message.getMessageSignature())){
+        if (!HashMethods.isHashMatch(strMessage, message.getMessageSignature())) {
             LOGGER.error("senderDecryptMessage: Failed to validate message signature");
             return null;
         }
         return strMessage;
     }
 
-    public static void receiverEncryptMessage(Message message, String receiverPassword){
+    public static void receiverEncryptMessage(Message message, String receiverPassword) {
         Optional<SecretKey> secretKeyOptional = ConversationMethods.decryptAESKeyReceiver(message.getConversation(), receiverPassword);
-        if (secretKeyOptional.isEmpty()){
+        if (secretKeyOptional.isEmpty()) {
             LOGGER.error("receiverEncryptMessage: Failed to decrypt conversation AES key");
             return;
         }
         message.setMessage(encrypt(message, secretKeyOptional.get()));
     }
 
-    public static String receiverDecryptMessage(Message message, String receiverPassword){
+    public static String receiverDecryptMessage(Message message, String receiverPassword) {
         Optional<SecretKey> secretKeyOptional = ConversationMethods.decryptAESKeyReceiver(message.getConversation(), receiverPassword);
-        if (secretKeyOptional.isEmpty()){
+        if (secretKeyOptional.isEmpty()) {
             LOGGER.error("receiverEncryptMessage: Failed to decrypt conversation AES key");
             return null;
         }

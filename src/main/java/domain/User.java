@@ -4,54 +4,18 @@ public class User {
 
     private int userId;
     private String userName;
-    private String passwordHashed;
+    private String password;
     private byte[] publicKey;
-    private byte[] privateKeyEncrypted;
+    private byte[] privateKey;
 
-    public User(){};
+    public User() {}
 
     private User(Builder builder) {
         this.userId = builder.userId;
         this.userName = builder.userName;
-        this.passwordHashed = builder.passwordHashed;
+        this.password = builder.password;
         this.publicKey = builder.publicKey;
-        this.privateKeyEncrypted = builder.privateKeyEncrypted;
-    }
-
-    public static class Builder {
-        private int userId;
-        private String userName;
-        private String passwordHashed;
-        private byte[] publicKey;
-        private byte[] privateKeyEncrypted;
-
-        public Builder userId(int userId) {
-            this.userId = userId;
-            return this;
-        }
-        public Builder userName(String userName) {
-            this.userName = userName;
-            return this;
-        }
-
-        public Builder passwordHashed(String passwordHashed) {
-            this.passwordHashed = passwordHashed;
-            return this;
-        }
-
-        public Builder publicKey(byte[] publicKey) {
-            this.publicKey = publicKey;
-            return this;
-        }
-
-        public Builder privateKeyEncrypted(byte[] privateKeyEncrypted) {
-            this.privateKeyEncrypted = privateKeyEncrypted;
-            return this;
-        }
-
-        public User build() {
-            return new User(this);
-        }
+        this.privateKey = builder.privateKey;
     }
 
     public int getUserId() {
@@ -70,12 +34,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getPasswordHashed() {
-        return passwordHashed;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHashed(String passwordHashed) {
-        this.passwordHashed = passwordHashed;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public byte[] getPublicKey() {
@@ -86,16 +50,53 @@ public class User {
         this.publicKey = publicKey;
     }
 
-    public byte[] getPrivateKeyEncrypted() {
-        return privateKeyEncrypted;
+    public byte[] getPrivateKey() {
+        return privateKey;
     }
 
-    public void setPrivateKeyEncrypted(byte[] privateKeyEncrypted) {
-        this.privateKeyEncrypted = privateKeyEncrypted;
+    public void setPrivateKey(byte[] privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public static class Builder {
+        private int userId;
+        private String userName;
+        private String password;
+        private byte[] publicKey;
+        private byte[] privateKey;
+
+        public Builder userId(int userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder userName(String userName) {
+            this.userName = userName;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder publicKey(byte[] publicKey) {
+            this.publicKey = publicKey;
+            return this;
+        }
+
+        public Builder privateKeyEncrypted(byte[] privateKeyEncrypted) {
+            this.privateKey = privateKeyEncrypted;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "(" + "UserName: " + userName + ", UserId: " + userId + ")";
     }
 }

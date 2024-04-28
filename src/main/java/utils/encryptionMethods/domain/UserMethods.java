@@ -17,84 +17,84 @@ public class UserMethods {
 
     private static final Logger LOGGER = LogManager.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static void assignPublicPrivateKeys(User user){
+    public static void assignPublicPrivateKeys(User user) {
         Optional<KeyPair> keyPairOptional = RSAMethods.generateKeyPair();
-        if (keyPairOptional.isEmpty()){
+        if (keyPairOptional.isEmpty()) {
             LOGGER.error("Failed to generate RSA keyPair");
             return;
         }
         user.setPublicKey(keyPairOptional.get().getPublic().getEncoded());
-        user.setPrivateKeyEncrypted(keyPairOptional.get().getPrivate().getEncoded());
+        user.setPrivateKey(keyPairOptional.get().getPrivate().getEncoded());
     }
 
-    public static void encryptUser(User user){
+    public static void encryptUser(User user) {
 
-        String hashPassword15 = HashMethods.hashString(user.getPasswordHashed(), 15);
-        Optional<SecretKey> secretKeyOptional = AESMethods.deriveKey100(user.getPasswordHashed());
+        String hashPassword15 = HashMethods.hashString(user.getPassword(), 15);
+        Optional<SecretKey> secretKeyOptional = AESMethods.deriveKey100(user.getPassword());
 
-        if (secretKeyOptional.isEmpty()){
+        if (secretKeyOptional.isEmpty()) {
             LOGGER.error("Failed to generate secret key from hash");
             return;
         }
-        Optional<byte[]> encryptedPrivateKeyOptional = AESMethods.encryptBytes(secretKeyOptional.get(), user.getPrivateKeyEncrypted());
-        if (encryptedPrivateKeyOptional.isEmpty()){
+        Optional<byte[]> encryptedPrivateKeyOptional = AESMethods.encryptBytes(secretKeyOptional.get(), user.getPrivateKey());
+        if (encryptedPrivateKeyOptional.isEmpty()) {
             LOGGER.error("Failed to encrypt private key with password hash");
             return;
         }
-        user.setPasswordHashed(hashPassword15);
-        user.setPrivateKeyEncrypted(encryptedPrivateKeyOptional.get());
+        user.setPassword(hashPassword15);
+        user.setPrivateKey(encryptedPrivateKeyOptional.get());
     }
 
-    public static User createEncyptedUser(String username, String password){
+    public static User createEncyptedUser(String username, String password) {
         User user = new User.Builder()
                 .userName(username)
-                .passwordHashed(password)
+                .password(password)
                 .build();
         assignPublicPrivateKeys(user);
         encryptUser(user);
         return user;
     }
 
-    public static User decryptUser(User user, String password){
-        if (!HashMethods.isHashMatch(password, user.getPasswordHashed())){
+    public static User decryptUser(User user, String password) {
+        if (!HashMethods.isHashMatch(password, user.getPassword())) {
             LOGGER.error("Incorrect password");
         }
         Optional<SecretKey> secretKeyOptional = AESMethods.deriveKey100(password);
-        if (secretKeyOptional.isEmpty()){
+        if (secretKeyOptional.isEmpty()) {
             LOGGER.error("Failed to generate key from password");
             return null;
         }
-        Optional<byte[]> decryptBytesOptional = AESMethods.decryptBytes(secretKeyOptional.get(), user.getPrivateKeyEncrypted());
-        if (decryptBytesOptional.isEmpty()){
+        Optional<byte[]> decryptBytesOptional = AESMethods.decryptBytes(secretKeyOptional.get(), user.getPrivateKey());
+        if (decryptBytesOptional.isEmpty()) {
             LOGGER.error("Failed to decrypt key");
             return null;
         }
         Optional<PrivateKey> privateKeyOptional = RSAMethods.convertBytesToPrivateKey(decryptBytesOptional.get());
-        if (privateKeyOptional.isEmpty()){
+        if (privateKeyOptional.isEmpty()) {
             LOGGER.error("Failed to convert privateKey(byte[]) -> PrivateKey");
             return null;
         }
-        user.setPrivateKeyEncrypted(privateKeyOptional.get().getEncoded());
-        user.setPasswordHashed(password);
+        user.setPrivateKey(privateKeyOptional.get().getEncoded());
+        user.setPassword(password);
         return user;
     }
 
-    public static PrivateKey getUserPrivateKey(User user, String password){
-        if (!HashMethods.isHashMatch(password, user.getPasswordHashed())){
+    public static PrivateKey getUserPrivateKey(User user, String password) {
+        if (!HashMethods.isHashMatch(password, user.getPassword())) {
             LOGGER.error("Incorrect password");
         }
         Optional<SecretKey> secretKeyOptional = AESMethods.deriveKey100(password);
-        if (secretKeyOptional.isEmpty()){
+        if (secretKeyOptional.isEmpty()) {
             LOGGER.error("Failed to generate key from password");
             return null;
         }
-        Optional<byte[]> decryptBytesOptional = AESMethods.decryptBytes(secretKeyOptional.get(), user.getPrivateKeyEncrypted());
-        if (decryptBytesOptional.isEmpty()){
+        Optional<byte[]> decryptBytesOptional = AESMethods.decryptBytes(secretKeyOptional.get(), user.getPrivateKey());
+        if (decryptBytesOptional.isEmpty()) {
             LOGGER.error("Failed to decrypt key");
             return null;
         }
         Optional<PrivateKey> privateKeyOptional = RSAMethods.convertBytesToPrivateKey(decryptBytesOptional.get());
-        if (privateKeyOptional.isEmpty()){
+        if (privateKeyOptional.isEmpty()) {
             LOGGER.error("Failed to convert privateKey(byte[]) -> PrivateKey");
             return null;
         }

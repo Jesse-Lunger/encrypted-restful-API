@@ -7,6 +7,8 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import persistence.impl.ConversationDAO;
+import persistence.impl.UserDAO;
 import service.ConversationService;
 import service.UserService;
 import utils.encryptionMethods.domain.ConversationMethods;
@@ -16,11 +18,11 @@ import java.util.List;
 
 public class ConversationTest {
 
-    private final UserService userService = new UserService();
-    private final ConversationService conversationService = new ConversationService();
+    private final UserService userService = new UserService(new UserDAO());
+    private final ConversationService conversationService = new ConversationService(new ConversationDAO());
 
     @DataProvider
-    public Object[][] users(){
+    public Object[][] users() {
         return new Object[][]{
                 {"john", "password1"},
                 {"billy", "password2"},
@@ -31,21 +33,21 @@ public class ConversationTest {
     }
 
     @BeforeTest()
-    public void populateUsers(){
+    public void populateUsers() {
         Object[][] data = users();
-        for (Object[] userData: users()){
+        for (Object[] userData : users()) {
             User user = UserMethods.createEncyptedUser((String) userData[0], (String) userData[1]);
             userService.saveEntity(user);
-            Assert.assertNotNull(userService.getByUserName(user.getUserName()));
+            Assert.assertNotNull(userService.getUserByName(user.getUserName()));
         }
     }
 
     @BeforeTest(dependsOnMethods = "populateUsers")
-    public void populateConversations(){
+    public void populateConversations() {
         List<User> users = userService.getAll();
         int numUsers = users.size();
-        for (int i = 0; i < numUsers; i++){
-            for (int j = i + 1; j < numUsers; j++){
+        for (int i = 0; i < numUsers; i++) {
+            for (int j = i + 1; j < numUsers; j++) {
                 Conversation conversation = ConversationMethods.createEncryptedConversation(users.get(i), users.get(j));
                 conversationService.saveEntity(conversation);
             }
@@ -54,7 +56,7 @@ public class ConversationTest {
 
     @Test
     public void updateTest() {
-        Conversation conversation = conversationService.getAll().getFirst();
+        Conversation conversation = conversationService.getAll().get(0);
         conversation.setReceiver(conversation.getSender());
         conversationService.updateEntity(conversation);
         conversation = conversationService.getEntityById(conversation.getConversationId());
@@ -62,11 +64,11 @@ public class ConversationTest {
     }
 
     @AfterTest
-    public void depopulateUsers(){
+    public void depopulateUsers() {
         Object[][] data = users();
-        for (Object[] userData: users()){
+        for (Object[] userData : users()) {
             String username = (String) userData[0];
-            User user = userService.getByUserName(username);
+            User user = userService.getUserByName(username);
             userService.removeEntityById(user.getUserId());
         }
         Assert.assertTrue(userService.getAll().isEmpty());

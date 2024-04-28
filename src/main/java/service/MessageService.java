@@ -1,17 +1,19 @@
 package service;
 
 import domain.Message;
+import org.springframework.stereotype.Service;
 import persistence.IMessageDAO;
 import persistence.impl.MessageDAO;
 
 import java.util.List;
 
+@Service
 public class MessageService implements IMessageDAO {
 
     private final MessageDAO messageDAO;
 
-    public MessageService(){
-        messageDAO = new MessageDAO();
+    public MessageService(MessageDAO messageDAO) {
+        this.messageDAO = messageDAO;
     }
 
     @Override

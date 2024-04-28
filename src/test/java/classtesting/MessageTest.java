@@ -9,6 +9,10 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import persistence.impl.ConversationDAO;
+import persistence.impl.MessageDAO;
+import persistence.impl.MessageTypeDAO;
+import persistence.impl.UserDAO;
 import service.ConversationService;
 import service.MessageService;
 import service.MessageTypeService;
@@ -25,14 +29,14 @@ import java.util.List;
 public class MessageTest {
 
 
-    private final UserService userService = new UserService();
-    private final ConversationService conversationService = new ConversationService();
-    private final MessageTypeService messageTypeService = new MessageTypeService();
-    private final MessageService messageService = new MessageService();
+    private final UserService userService = new UserService(new UserDAO());
+    private final ConversationService conversationService = new ConversationService(new ConversationDAO());
+    private final MessageTypeService messageTypeService = new MessageTypeService(new MessageTypeDAO());
+    private final MessageService messageService = new MessageService(new MessageDAO());
 
 
     @DataProvider(name = "messageTypes")
-    public Object[][] messageTypes(){
+    public Object[][] messageTypes() {
         return new Object[][]{
                 {"publicMessage"},
                 {"privateMessage"}
@@ -40,7 +44,7 @@ public class MessageTest {
     }
 
     @DataProvider
-    public Object[][] users(){
+    public Object[][] users() {
         return new Object[][]{
                 {"john", "password1"},
                 {"billy", "password2"},
@@ -61,8 +65,8 @@ public class MessageTest {
     }
 
     @DataProvider
-    public Object[][] messages(){
-        return  new Object[][]{
+    public Object[][] messages() {
+        return new Object[][]{
                 {"message aes1", new Timestamp(System.currentTimeMillis())},
                 {"message aes2", new Timestamp(System.currentTimeMillis())},
                 {"message aes3", new Timestamp(System.currentTimeMillis())},
@@ -71,7 +75,7 @@ public class MessageTest {
     }
 
     @BeforeTest
-    public void populateMessageTypes(){
+    public void populateMessageTypes() {
         Object[][] data = messageTypes();
         for (Object[] messageTypeData : data) {
             String messageTypeStr = (String) messageTypeData[0];
@@ -85,21 +89,21 @@ public class MessageTest {
     }
 
     @BeforeTest(dependsOnMethods = "populateMessageTypes")
-    public void populateUsers(){
+    public void populateUsers() {
         Object[][] data = users();
-        for (Object[] userData: users()){
+        for (Object[] userData : users()) {
             User user = UserMethods.createEncyptedUser((String) userData[0], (String) userData[1]);
             userService.saveEntity(user);
-            Assert.assertNotNull(userService.getByUserName(user.getUserName()));
+            Assert.assertNotNull(userService.getUserByName(user.getUserName()));
         }
     }
 
     @BeforeTest(dependsOnMethods = "populateUsers")
-    public void populateConversations(){
+    public void populateConversations() {
         List<User> users = userService.getAll();
         int numUsers = users.size();
-        for (int i = 0; i < numUsers; i++){
-            for (int j = i + 1; j < numUsers; j++){
+        for (int i = 0; i < numUsers; i++) {
+            for (int j = i + 1; j < numUsers; j++) {
                 Conversation conversation = ConversationMethods.createEncryptedConversation(users.get(i), users.get(j));
                 conversationService.saveEntity(conversation);
             }
@@ -107,7 +111,7 @@ public class MessageTest {
     }
 
     @BeforeTest(dependsOnMethods = "populateConversations")
-    public void populateMessages(){
+    public void populateMessages() {
         Object[][] data = messages();
         List<Conversation> conversationList = conversationService.getAll();
         List<MessageType> messageTypeList = messageTypeService.getAll();
@@ -115,7 +119,7 @@ public class MessageTest {
         HashMap<String, String> userMap = createUserMap(users());
 
         int count = 0;
-        for (Object[] messageData: data){
+        for (Object[] messageData : data) {
             Conversation conversation = conversationList.get(count);
 
             String senderPassword = userMap.get(conversation.getSender().getUserName());
@@ -130,18 +134,18 @@ public class MessageTest {
 
     @Test
     public void updateTest() {
-        Message message = messageService.getAll().getFirst();
+        Message message = messageService.getAll().get(0);
         byte[] newMessage = BasicConversions.stringToBytes("new message");
         message.setMessage(newMessage);
         messageService.updateEntity(message);
-        message = messageService.getAll().getFirst();
+        message = messageService.getAll().get(0);
         Assert.assertEquals(message.getMessage(), newMessage);
     }
 
     @Test
     public void receiverSenderDecryptMessagetest() {
         HashMap<String, String> userMap = createUserMap(users());
-        Message message = messageService.getAll().getFirst();
+        Message message = messageService.getAll().get(0);
         Conversation conversation = message.getConversation();
 
         String receiverPassword = userMap.get(conversation.getReceiver().getUserName());
@@ -154,18 +158,18 @@ public class MessageTest {
     }
 
     @AfterTest
-    public void depopulateUsers(){
-        for (Object[] userData: users()){
+    public void depopulateUsers() {
+        for (Object[] userData : users()) {
             String username = (String) userData[0];
-            User user = userService.getByUserName(username);
+            User user = userService.getUserByName(username);
             userService.removeEntityById(user.getUserId());
         }
         Assert.assertTrue(userService.getAll().isEmpty());
     }
 
     @AfterTest(dependsOnMethods = "depopulateUsers")
-    public void depopulateMessageTypes(){
-        for (MessageType messageType: messageTypeService.getAll()){
+    public void depopulateMessageTypes() {
+        for (MessageType messageType : messageTypeService.getAll()) {
             messageTypeService.removeEntityById(messageType.getMessageTypeId());
         }
     }

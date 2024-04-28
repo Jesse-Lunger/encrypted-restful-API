@@ -1,0 +1,39 @@
+12:16:15.746 [main] INFO  apitest.TestApplication - Starting TestApplication using Java 21.0.2 with PID 12448 (C:\Users\jesse\Desktop\encryptedDb\backend\target\classes started by jesse in C:\Users\jesse\Desktop\encryptedDb\backend)
+12:16:15.754 [main] INFO  apitest.TestApplication - No active profile set, falling back to 1 default profile: "default"
+12:16:16.352 [main] WARN  org.mybatis.spring.mapper.ClassPathMapperScanner - No MyBatis mapper was found in '[apitest]' package. Please check your configuration.
+12:16:16.686 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+12:16:16.694 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+12:16:16.696 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+12:16:16.696 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+12:16:16.729 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+12:16:16.730 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 949 ms
+12:16:17.250 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+12:16:17.266 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path ''
+12:16:17.273 [main] INFO  apitest.TestApplication - Started TestApplication in 1.813 seconds (process running for 2.525)
+12:17:55.679 [http-nio-8081-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+12:17:55.680 [http-nio-8081-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+12:17:55.681 [http-nio-8081-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+12:30:40.523 [main] INFO  org.testng.internal.Utils - [TestNG] Running:
+  C:\Users\jesse\AppData\Local\JetBrains\IdeaIC2023.3\temp-testng-customsuite.xml
+
+12:34:54.549 [main] INFO  org.testng.internal.Utils - [TestNG] Running:
+  C:\Users\jesse\AppData\Local\JetBrains\IdeaIC2023.3\temp-testng-customsuite.xml
+
+12:35:24.080 [main] INFO  org.testng.internal.Utils - [TestNG] Running:
+  C:\Users\jesse\AppData\Local\JetBrains\IdeaIC2023.3\temp-testng-customsuite.xml
+
+12:37:09.791 [main] INFO  org.testng.internal.Utils - [TestNG] Running:
+  C:\Users\jesse\AppData\Local\JetBrains\IdeaIC2023.3\temp-testng-customsuite.xml
+
+12:37:31.257 [main] INFO  org.testng.internal.Utils - [TestNG] Running:
+  C:\Users\jesse\AppData\Local\JetBrains\IdeaIC2023.3\temp-testng-customsuite.xml
+
+12:37:47.770 [main] INFO  org.testng.internal.Utils - [TestNG] Running:
+  C:\Users\jesse\AppData\Local\JetBrains\IdeaIC2023.3\temp-testng-customsuite.xml
+
+12:40:27.688 [main] INFO  org.testng.internal.Utils - [TestNG] Running:
+  C:\Users\jesse\AppData\Local\JetBrains\IdeaIC2023.3\temp-testng-customsuite.xml
+
+12:42:23.046 [main] INFO  org.testng.internal.Utils - [TestNG] Running:
+  C:\Users\jesse\AppData\Local\JetBrains\IdeaIC2023.3\temp-testng-customsuite.xml
+

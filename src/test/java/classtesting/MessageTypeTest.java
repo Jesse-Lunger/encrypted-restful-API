@@ -1,23 +1,20 @@
 package classtesting;
 
-import domain.Message;
 import domain.MessageType;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import service.MessageService;
+import persistence.impl.MessageTypeDAO;
 import service.MessageTypeService;
-
-import java.lang.invoke.MethodHandles;
 
 public class MessageTypeTest {
 
-    private static final MessageTypeService messageTypeService= new MessageTypeService();
+    private static final MessageTypeService messageTypeService = new MessageTypeService(new MessageTypeDAO());
 
     @DataProvider(name = "messageTypes")
-    public Object[][] messageTypes(){
+    public Object[][] messageTypes() {
         return new Object[][]{
                 {"publicMessage"},
                 {"privateMessage"}
@@ -25,7 +22,7 @@ public class MessageTypeTest {
     }
 
     @BeforeTest
-    public void populateMessageTypes(){
+    public void populateMessageTypes() {
         Object[][] data = messageTypes();
         for (Object[] messageTypeData : data) {
             String messageTypeStr = (String) messageTypeData[0];
@@ -38,7 +35,7 @@ public class MessageTypeTest {
     }
 
     @Test
-    public void addDuplicateTest(){
+    public void addDuplicateTest() {
         Object[][] data = messageTypes();
         String duplicateData = (String) data[0][0];
         MessageType messageType = new MessageType.Builder()
@@ -50,7 +47,7 @@ public class MessageTypeTest {
     }
 
     @Test
-    public void updateTest(){
+    public void updateTest() {
         String newName = "newName";
         Object[][] data = messageTypes();
         MessageType messageType = messageTypeService.getMessageTypeByName((String) data[0][0]);
@@ -63,10 +60,9 @@ public class MessageTypeTest {
     }
 
 
-
     @AfterTest
-    public void depopulateDatabase(){
-        for (MessageType messageType: messageTypeService.getAll()){
+    public void depopulateDatabase() {
+        for (MessageType messageType : messageTypeService.getAll()) {
             messageTypeService.removeEntityById(messageType.getMessageTypeId());
         }
         Assert.assertTrue(messageTypeService.getAll().isEmpty());

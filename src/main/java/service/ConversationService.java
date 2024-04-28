@@ -1,17 +1,19 @@
 package service;
 
 import domain.Conversation;
+import org.springframework.stereotype.Service;
 import persistence.IConversationDAO;
 import persistence.impl.ConversationDAO;
 
 import java.util.List;
 
+@Service
 public class ConversationService implements IConversationDAO {
 
     private final ConversationDAO conversationDAO;
 
-    public ConversationService(){
-        conversationDAO = new ConversationDAO();
+    public ConversationService(ConversationDAO conversationDAO) {
+        this.conversationDAO = conversationDAO;
     }
 
     @Override

@@ -7,9 +7,9 @@
     <resultMap id="UserResultMap" type="User" autoMapping="true">
         <id property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
-        <result property="passwordHashed" column="password_hashed"/>
+        <result property="password" column="password"/>
         <result property="publicKey" column="public_key"/>
-        <result property="privateKeyEncrypted" column="private_key_encrypted"/>
+        <result property="privateKey" column="private_key"/>
     </resultMap>
 
     <select id="getAll" resultMap="UserResultMap">
@@ -20,21 +20,21 @@
         SELECT * FROM users WHERE user_id = #{id};
     </select>
 
-    <select id="getByUserName" resultMap="UserResultMap">
+    <select id="getUserByName" resultMap="UserResultMap">
         SELECT * FROM users WHERE user_name = #{userName};
     </select>
 
     <insert id="saveEntity" parameterType="User" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
-        INSERT INTO users (user_name, password_hashed, public_key, private_key_encrypted)
-        VALUES (#{userName}, #{passwordHashed}, #{publicKey}, #{privateKeyEncrypted});
+        INSERT INTO users (user_name, password, public_key, private_key)
+        VALUES (#{userName}, #{password}, #{publicKey}, #{privateKey});
     </insert>
 
     <update id="updateEntity" parameterType="User">
         UPDATE users SET
         user_name = #{userName},
-        password_hashed = #{passwordHashed},
+        password = #{password},
         public_key = #{publicKey},
-        private_key_encrypted = #{privateKeyEncrypted}
+        private_key = #{privateKey}
         WHERE user_id = #{userId};
     </update>
 

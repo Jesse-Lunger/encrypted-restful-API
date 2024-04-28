@@ -30,7 +30,7 @@
         <mapper resource="mappers/conversation-mapper.xml"/>
         <mapper resource="mappers/message-mapper.xml"/>
         <mapper resource="mappers/message-type-mapper.xml"/>
-        <mapper resource="mappers/user-mapper.xml"/>
+        <mapper resource="mappers/User-mapper.xml"/>
     </mappers>
 
 </configuration>

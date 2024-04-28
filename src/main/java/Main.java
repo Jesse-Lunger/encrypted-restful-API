@@ -1,32 +1,21 @@
-import domain.Conversation;
-import domain.Message;
-import domain.MessageType;
 import domain.User;
-import utils.encryptionMethods.domain.ConversationMethods;
-import utils.encryptionMethods.domain.MessageMethods;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import persistence.IUserDAO;
+import persistence.impl.UserDAO;
+import service.UserService;
 import utils.encryptionMethods.domain.UserMethods;
 
+import java.lang.invoke.MethodHandles;
+
 public class Main {
+    private static final Logger LOGGER = LogManager.getLogger(MethodHandles.lookup().lookupClass());
 
 
     public static void main(String[] args) {
-
-        String password1 = "password1";
-        String password2 = "password2";
-
-        User user1 = UserMethods.createEncyptedUser("jake", password1);
-        User user2 = UserMethods.createEncyptedUser("bill", password2);
-
-        MessageType messageType = new MessageType.Builder()
-                .messageTypeName("private message")
-                .build();
-
-        Conversation conversation = ConversationMethods.createEncryptedConversation(user1, user2);
-
-        Message message = MessageMethods.createEncryptedMessage(password1, conversation, messageType, "hello this is a secret message");
-
-        System.out.println(MessageMethods.senderDecryptMessage(message, password1));
-        System.out.println(MessageMethods.receiverDecryptMessage(message, password2));
 
     }
 }

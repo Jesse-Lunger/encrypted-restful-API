@@ -5,30 +5,12 @@ public class MessageType {
     private int messageTypeId;
     private String messageTypeName;
 
-    public MessageType(){}
-
-    private MessageType(Builder builder){
-        this.messageTypeId = builder.messageTypeId;
-        this.messageTypeName = builder.messageTypeName;
+    public MessageType() {
     }
 
-    public static class Builder{
-        private int messageTypeId;
-        private String messageTypeName;
-
-        public Builder messageTypeId(int messageTypeId){
-            this.messageTypeId = messageTypeId;
-            return this;
-        }
-
-        public Builder messageTypeName(String messageTypeName){
-            this.messageTypeName = messageTypeName;
-            return this;
-        }
-
-        public MessageType build(){
-            return new MessageType(this);
-        }
+    private MessageType(Builder builder) {
+        this.messageTypeId = builder.messageTypeId;
+        this.messageTypeName = builder.messageTypeName;
     }
 
     public int getMessageTypeId() {
@@ -48,7 +30,26 @@ public class MessageType {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "(Message Type: " + messageTypeName + ", id: " + messageTypeId + ")";
+    }
+
+    public static class Builder {
+        private int messageTypeId;
+        private String messageTypeName;
+
+        public Builder messageTypeId(int messageTypeId) {
+            this.messageTypeId = messageTypeId;
+            return this;
+        }
+
+        public Builder messageTypeName(String messageTypeName) {
+            this.messageTypeName = messageTypeName;
+            return this;
+        }
+
+        public MessageType build() {
+            return new MessageType(this);
+        }
     }
 }

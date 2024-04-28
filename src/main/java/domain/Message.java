@@ -11,7 +11,8 @@ public class Message {
     private String messageSignature;
     private Timestamp time;
 
-    public Message(){}
+    public Message() {
+    }
 
     private Message(Builder builder) {
         this.conversation = builder.conversation;
@@ -19,44 +20,6 @@ public class Message {
         this.message = builder.message;
         this.messageSignature = builder.messageSignature;
         this.time = builder.time;
-    }
-
-    public static class Builder {
-        private Conversation conversation;
-        private MessageType messageType;
-        private byte[] message;
-        private String messageSignature;
-        private Timestamp time;
-
-        public Builder conversation(Conversation conversation) {
-            this.conversation = conversation;
-            return this;
-        }
-
-        public Builder messageType(MessageType messageType) {
-            this.messageType = messageType;
-            return this;
-        }
-
-        public Builder message(byte[] message) {
-            this.message = message;
-            return this;
-        }
-
-        public Builder messageSignature(String messageSignature) {
-            this.messageSignature = messageSignature;
-            return this;
-        }
-
-
-        public Builder time(Timestamp time) {
-            this.time = time;
-            return this;
-        }
-
-        public Message build() {
-            return new Message(this);
-        }
     }
 
     // Getters and setters
@@ -109,7 +72,45 @@ public class Message {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "(messageID= " + messageId + ", " + conversation + ")";
+    }
+
+    public static class Builder {
+        private Conversation conversation;
+        private MessageType messageType;
+        private byte[] message;
+        private String messageSignature;
+        private Timestamp time;
+
+        public Builder conversation(Conversation conversation) {
+            this.conversation = conversation;
+            return this;
+        }
+
+        public Builder messageType(MessageType messageType) {
+            this.messageType = messageType;
+            return this;
+        }
+
+        public Builder message(byte[] message) {
+            this.message = message;
+            return this;
+        }
+
+        public Builder messageSignature(String messageSignature) {
+            this.messageSignature = messageSignature;
+            return this;
+        }
+
+
+        public Builder time(Timestamp time) {
+            this.time = time;
+            return this;
+        }
+
+        public Message build() {
+            return new Message(this);
+        }
     }
 }

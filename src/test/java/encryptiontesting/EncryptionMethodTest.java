@@ -20,14 +20,14 @@ public class EncryptionMethodTest {
     private static final Logger LOGGER = LogManager.getLogger(MethodHandles.lookup().lookupClass());
 
     @Test
-    public void testHash(){
+    public void testHash() {
         String password = "123assdfdsaf";
         String hashedPassword = HashMethods.hashString(password, 14);
         Assert.assertTrue(HashMethods.isHashMatch(password, hashedPassword), "password does not match hashedPassword");
     }
 
     @Test
-    public void testAES(){
+    public void testAES() {
         Optional<SecretKey> secretKeyOptional = AESMethods.generateAESKey();
         Assert.assertTrue(secretKeyOptional.isPresent());
         SecretKey secretKey = secretKeyOptional.get();
@@ -42,7 +42,7 @@ public class EncryptionMethodTest {
     }
 
     @Test
-    void testRSA(){
+    void testRSA() {
         Optional<KeyPair> keyPairOptional = RSAMethods.generateKeyPair();
         Assert.assertTrue(keyPairOptional.isPresent());
         Optional<SecretKey> AESKeyOptional = AESMethods.generateAESKey();

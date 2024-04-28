@@ -2,11 +2,13 @@ package persistence.impl;
 
 import domain.Message;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 import persistence.IMessageDAO;
-import utils.encryptionMethods.core.MySQLFactory;
+import utils.MySQLFactory;
 
 import java.util.List;
 
+@Repository
 public class MessageDAO implements IMessageDAO {
     @Override
     public List<Message> getAll() {

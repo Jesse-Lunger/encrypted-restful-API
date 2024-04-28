@@ -4,12 +4,14 @@ import domain.MessageType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Repository;
 import persistence.IMessageTypeDAO;
-import utils.encryptionMethods.core.MySQLFactory;
+import utils.MySQLFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+@Repository
 public class MessageTypeDAO implements IMessageTypeDAO {
 
     private static final Logger LOGGER = LogManager.getLogger(MethodHandles.lookup().lookupClass());
@@ -40,8 +42,8 @@ public class MessageTypeDAO implements IMessageTypeDAO {
 
     @Override
     public void saveEntity(MessageType messageType) {
-        if (getMessageTypeByName(messageType.getMessageTypeName()) != null){
-            LOGGER.error(messageType.getMessageTypeName() + " already exists");
+        if (getMessageTypeByName(messageType.getMessageTypeName()) != null) {
+            LOGGER.info(messageType.getMessageTypeName() + " already exists");
             return;
         }
         try (SqlSession sqlSession = MySQLFactory.getSqlSessionFactory().openSession()) {

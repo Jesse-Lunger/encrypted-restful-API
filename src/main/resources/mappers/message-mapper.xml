@@ -23,7 +23,8 @@
         SELECT * FROM messages WHERE message_id = #{id};
     </select>
 
-    <insert id="saveEntity" parameterType="Message" useGeneratedKeys="true" keyProperty="messageId" keyColumn="message_id">
+    <insert id="saveEntity" parameterType="Message" useGeneratedKeys="true" keyProperty="messageId"
+            keyColumn="message_id">
         INSERT INTO messages (conversation_id, message_type_id, message, message_signature, time)
         VALUES (#{conversation.conversationId}, #{messageType.messageTypeId}, #{message}, #{messageSignature}, #{time});
     </insert>

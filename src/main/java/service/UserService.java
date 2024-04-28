@@ -1,46 +1,51 @@
 package service;
 
 import domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import persistence.IUserDAO;
 import persistence.impl.UserDAO;
 
 import java.util.List;
 
-public class UserService implements IUserDAO {
+public class UserService implements IUserDAO{
 
-    private final UserDAO userDAO;
 
-    public UserService(){
-        userDAO = new UserDAO();
+
+    private IUserDAO iUserDAO ;
+
+    public UserService(UserDAO userDAO){
+        this.iUserDAO = userDAO;
+    }
+
+    @Override
+    public User getUserByName(String userName) {
+        return iUserDAO.getUserByName(userName);
     }
 
     @Override
     public List<User> getAll() {
-        return userDAO.getAll();
+        return iUserDAO.getAll();
     }
 
     @Override
     public User getEntityById(int id) {
-        return userDAO.getEntityById(id);
-    }
-
-    @Override
-    public User getByUserName(String userName) {
-        return userDAO.getByUserName(userName);
+        return iUserDAO.getEntityById(id);
     }
 
     @Override
     public void saveEntity(User user) {
-        userDAO.saveEntity(user);
+        iUserDAO.saveEntity(user);
     }
 
     @Override
     public void updateEntity(User user) {
-        userDAO.updateEntity(user);
+        iUserDAO.updateEntity(user);
     }
 
     @Override
     public void removeEntityById(int id) {
-        userDAO.removeEntityById(id);
+        iUserDAO.removeEntityById(id);
     }
 }

@@ -21,7 +21,8 @@
         SELECT * FROM message_types WHERE message_type_id = #{id};
     </select>
 
-    <insert id="saveEntity" parameterType="MessageType" useGeneratedKeys="true" keyProperty="messageTypeId" keyColumn="message_type_id">
+    <insert id="saveEntity" parameterType="MessageType" useGeneratedKeys="true" keyProperty="messageTypeId"
+            keyColumn="message_type_id">
         INSERT INTO message_types (message_type_name)
         VALUES (#{messageTypeName});
     </insert>

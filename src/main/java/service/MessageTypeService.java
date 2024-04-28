@@ -1,17 +1,19 @@
 package service;
 
 import domain.MessageType;
+import org.springframework.stereotype.Service;
 import persistence.IMessageTypeDAO;
 import persistence.impl.MessageTypeDAO;
 
 import java.util.List;
 
+@Service
 public class MessageTypeService implements IMessageTypeDAO {
 
-    private final MessageTypeDAO messageTypeDAO;
+    private final IMessageTypeDAO messageTypeDAO;
 
-    public MessageTypeService(){
-        messageTypeDAO = new MessageTypeDAO();
+    public MessageTypeService(MessageTypeDAO messageTypeDAO) {
+        this.messageTypeDAO = messageTypeDAO;
     }
 
     @Override

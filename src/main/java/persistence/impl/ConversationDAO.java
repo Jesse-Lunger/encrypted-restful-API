@@ -2,11 +2,13 @@ package persistence.impl;
 
 import domain.Conversation;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 import persistence.IConversationDAO;
-import utils.encryptionMethods.core.MySQLFactory;
+import utils.MySQLFactory;
 
 import java.util.List;
 
+@Repository
 public class ConversationDAO implements IConversationDAO {
 
     @Override

@@ -1,9 +1,13 @@
 package persistence;
 
 import domain.User;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
-public interface IUserDAO extends IBaseDAO<User>{
+import java.util.List;
 
-    public User getByUserName(@Param("userName") String userName);
+
+public interface IUserDAO extends IBaseDAO<User> {
+
+    User getUserByName(@Param("userName") String userName);
+
 }

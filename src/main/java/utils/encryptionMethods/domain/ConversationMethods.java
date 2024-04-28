@@ -17,17 +17,17 @@ public class ConversationMethods {
 
     private static final Logger LOGGER = LogManager.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static void encryptConversation(Conversation conversation){
+    public static void encryptConversation(Conversation conversation) {
         Optional<PublicKey> senderPublicKeyOptional = RSAMethods.convertBytesToPublicKey(conversation.getSender().getPublicKey());
         Optional<PublicKey> receiverPublicKeyOptional = RSAMethods.convertBytesToPublicKey(conversation.getReceiver().getPublicKey());
 
-        if (senderPublicKeyOptional.isEmpty() || receiverPublicKeyOptional.isEmpty()){
+        if (senderPublicKeyOptional.isEmpty() || receiverPublicKeyOptional.isEmpty()) {
             LOGGER.error("encryptConversation: Failed to create public key from byte data");
             return;
         }
         Optional<byte[]> encryptedAESKeySenderOptional = RSAMethods.encryptBytes(senderPublicKeyOptional.get(), conversation.getAesKeySender());
         Optional<byte[]> encryptedAESKeyReceiverOptional = RSAMethods.encryptBytes(receiverPublicKeyOptional.get(), conversation.getAesKeyReceiver());
-        if (encryptedAESKeySenderOptional.isEmpty() || encryptedAESKeyReceiverOptional.isEmpty()){
+        if (encryptedAESKeySenderOptional.isEmpty() || encryptedAESKeyReceiverOptional.isEmpty()) {
             LOGGER.error("encryptConversation: FAiled to encrypt AES key");
             return;
         }
@@ -35,9 +35,9 @@ public class ConversationMethods {
         conversation.setAesKeyReceiver(encryptedAESKeyReceiverOptional.get());
     }
 
-    public static Conversation createEncryptedConversation(User sender, User receiver){
+    public static Conversation createEncryptedConversation(User sender, User receiver) {
         Optional<SecretKey> secretKeyOptional = AESMethods.generateAESKey();
-        if (secretKeyOptional.isEmpty()){
+        if (secretKeyOptional.isEmpty()) {
             LOGGER.error("createEncryptedConversation: Failed to generate AES key");
             return null;
         }
@@ -52,20 +52,20 @@ public class ConversationMethods {
         return conversation;
     }
 
-    public static Optional<SecretKey> decryptAESKeySender(Conversation conversation, String senderPassword){
+    public static Optional<SecretKey> decryptAESKeySender(Conversation conversation, String senderPassword) {
         PrivateKey privateKey = UserMethods.getUserPrivateKey(conversation.getSender(), senderPassword);
         Optional<byte[]> keyDataOptional = RSAMethods.decryptBytes(privateKey, conversation.getAesKeySender());
-        if (keyDataOptional.isEmpty()){
+        if (keyDataOptional.isEmpty()) {
             LOGGER.error("decryptAESKeySender: Failed to decrypt conversationSenderAESKey");
             return Optional.empty();
         }
         return Optional.of(AESMethods.convertBytesToKey(keyDataOptional.get()));
     }
 
-    public static Optional<SecretKey> decryptAESKeyReceiver(Conversation conversation, String receiverPassword){
+    public static Optional<SecretKey> decryptAESKeyReceiver(Conversation conversation, String receiverPassword) {
         PrivateKey privateKey = UserMethods.getUserPrivateKey(conversation.getReceiver(), receiverPassword);
         Optional<byte[]> keyDataOptional = RSAMethods.decryptBytes(privateKey, conversation.getAesKeyReceiver());
-        if (keyDataOptional.isEmpty()){
+        if (keyDataOptional.isEmpty()) {
             LOGGER.error("decryptAESKeySender: Failed to decrypt conversationSenderAESKey");
             return Optional.empty();
         }
